@@ -1,11 +1,20 @@
 
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Search, User, LogOut } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 const Navbar = () => {
   const { user, logout, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    navigate(`/?search=${encodeURIComponent(searchQuery)}`);
+  };
 
   return (
     <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b">
@@ -16,14 +25,23 @@ const Navbar = () => {
           </Link>
 
           <div className="flex items-center space-x-6">
-            <div className="relative hidden md:block">
-              <input
+            <form onSubmit={handleSearch} className="relative hidden md:block">
+              <Input
                 type="text"
                 placeholder="Search events..."
-                className="w-64 px-4 py-2 rounded-full bg-neutral/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-64 pr-10"
               />
-              <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
-            </div>
+              <Button
+                type="submit"
+                variant="ghost"
+                size="icon"
+                className="absolute right-0 top-0 h-full"
+              >
+                <Search className="h-5 w-5 text-gray-400" />
+              </Button>
+            </form>
 
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">

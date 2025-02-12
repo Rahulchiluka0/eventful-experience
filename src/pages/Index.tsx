@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Calendar, MapPin, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -44,11 +44,26 @@ const events = [
 const Categories = ["All", "Music", "Technology", "Food", "Sports", "Arts"];
 
 const Index = () => {
+  const [searchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const searchQuery = searchParams.get("search") || "";
 
-  const filteredEvents = events.filter(
-    event => selectedCategory === "All" || event.category === selectedCategory
-  );
+  const filteredEvents = events.filter(event => {
+    const matchesCategory = selectedCategory === "All" || event.category === selectedCategory;
+    const matchesSearch = searchQuery === "" || 
+      event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      event.venue.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    return matchesCategory && matchesSearch;
+  });
+
+  // Reset category when search query changes
+  useEffect(() => {
+    if (searchQuery) {
+      setSelectedCategory("All");
+    }
+  }, [searchQuery]);
 
   return (
     <div className="animate-fadeIn">
@@ -89,47 +104,63 @@ const Index = () => {
 
       {/* Events Grid */}
       <section className="container mx-auto px-4 py-8">
-        <h2 className="text-3xl font-bold mb-8">Upcoming Events</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredEvents.map(event => (
-            <Link
-              key={event.id}
-              to={`/events/${event.id}`}
-              className="group block bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-            >
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={event.image}
-                  alt={event.title}
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full text-sm font-semibold text-primary">
-                  ${event.price}
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-                  {event.title}
-                </h3>
-                <p className="text-gray-600 mb-4">{event.description}</p>
-                <div className="space-y-2">
-                  <div className="flex items-center text-gray-500">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    <span>{event.date}</span>
-                  </div>
-                  <div className="flex items-center text-gray-500">
-                    <Clock className="w-4 h-4 mr-2" />
-                    <span>{event.time}</span>
-                  </div>
-                  <div className="flex items-center text-gray-500">
-                    <MapPin className="w-4 h-4 mr-2" />
-                    <span>{event.venue}</span>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-3xl font-bold">
+            {searchQuery ? `Search Results for "${searchQuery}"` : "Upcoming Events"}
+          </h2>
+          {filteredEvents.length === 0 && (
+            <Button variant="outline" onClick={() => window.location.href = "/"}>
+              Clear Search
+            </Button>
+          )}
         </div>
+        
+        {filteredEvents.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-xl text-gray-600">No events found. Try adjusting your search criteria.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredEvents.map(event => (
+              <Link
+                key={event.id}
+                to={`/events/${event.id}`}
+                className="group block bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+              >
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={event.image}
+                    alt={event.title}
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full text-sm font-semibold text-primary">
+                    ${event.price}
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                    {event.title}
+                  </h3>
+                  <p className="text-gray-600 mb-4">{event.description}</p>
+                  <div className="space-y-2">
+                    <div className="flex items-center text-gray-500">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      <span>{event.date}</span>
+                    </div>
+                    <div className="flex items-center text-gray-500">
+                      <Clock className="w-4 h-4 mr-2" />
+                      <span>{event.time}</span>
+                    </div>
+                    <div className="flex items-center text-gray-500">
+                      <MapPin className="w-4 h-4 mr-2" />
+                      <span>{event.venue}</span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );
