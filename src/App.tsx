@@ -11,6 +11,7 @@ import EventDetails from "./pages/EventDetails";
 import Booking from "./pages/Booking";
 import Payment from "./pages/Payment";
 import Confirmation from "./pages/Confirmation";
+import PaymentFailed from "./pages/PaymentFailed";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
@@ -30,6 +31,7 @@ const App = () => (
               <Route path="/events/:id" element={<EventDetails />} />
               <Route path="/booking/:id" element={<Booking />} />
               <Route path="/payment/:bookingId" element={<Payment />} />
+              <Route path="/payment/failed/:bookingId" element={<PaymentFailed />} />
               <Route path="/confirmation/:bookingId" element={<Confirmation />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
