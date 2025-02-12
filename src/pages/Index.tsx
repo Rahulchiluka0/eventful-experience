@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Calendar, MapPin, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -47,6 +46,11 @@ const Index = () => {
   const [searchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const searchQuery = searchParams.get("search") || "";
+  const eventsRef = useRef<HTMLElement>(null);
+
+  const handleExplore = () => {
+    eventsRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const filteredEvents = events.filter(event => {
     const matchesCategory = selectedCategory === "All" || event.category === selectedCategory;
@@ -58,7 +62,6 @@ const Index = () => {
     return matchesCategory && matchesSearch;
   });
 
-  // Reset category when search query changes
   useEffect(() => {
     if (searchQuery) {
       setSelectedCategory("All");
@@ -80,6 +83,7 @@ const Index = () => {
           <Button
             size="lg"
             className="w-fit bg-white text-primary hover:bg-white/90"
+            onClick={handleExplore}
           >
             Explore Events
           </Button>
@@ -103,7 +107,7 @@ const Index = () => {
       </section>
 
       {/* Events Grid */}
-      <section className="container mx-auto px-4 py-8">
+      <section ref={eventsRef} className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-bold">
             {searchQuery ? `Search Results for "${searchQuery}"` : "Upcoming Events"}
