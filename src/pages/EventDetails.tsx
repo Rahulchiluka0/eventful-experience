@@ -1,10 +1,13 @@
 
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, MapPin, Share2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const EventDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   // Mock event data (in a real app, this would come from an API)
   const event = {
@@ -18,6 +21,41 @@ const EventDetails = () => {
     price: 99.99,
     category: "Music",
     longDescription: "Join us for an unforgettable day of music featuring top artists from around the world. Experience amazing performances, great food, and create lasting memories with friends and family.",
+  };
+
+  const handleBookNow = () => {
+    navigate(`/booking/${id}`);
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: event.title,
+      text: event.description,
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        toast({
+          title: "Shared successfully",
+          description: "The event has been shared.",
+        });
+      } else {
+        // Fallback to copying to clipboard
+        await navigator.clipboard.writeText(window.location.href);
+        toast({
+          title: "Link copied",
+          description: "Event link has been copied to clipboard.",
+        });
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to share the event.",
+      });
+    }
   };
 
   return (
@@ -72,8 +110,17 @@ const EventDetails = () => {
                     <span className="text-2xl font-bold">${event.price}</span>
                     <span className="text-gray-600"> / ticket</span>
                   </div>
-                  <Button className="w-full mb-4">Book Now</Button>
-                  <Button variant="outline" className="w-full flex items-center justify-center gap-2">
+                  <Button 
+                    className="w-full mb-4"
+                    onClick={handleBookNow}
+                  >
+                    Book Now
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full flex items-center justify-center gap-2"
+                    onClick={handleShare}
+                  >
                     <Share2 className="w-4 h-4" />
                     Share Event
                   </Button>
