@@ -15,6 +15,7 @@ import PaymentFailed from "./pages/PaymentFailed";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
+import Redirect from "./pages/Redirect";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ const App = () => (
               <Route path="/confirmation/:bookingId" element={<Confirmation />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/redirect" element={<Redirect />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
