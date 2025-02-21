@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import Layout from "./components/Layout";
 import AdminLayout from "./components/admin/AdminLayout";
+import Dashboard from "./components/admin/Dashboard";
 import Index from "./pages/Index";
 import EventDetails from "./pages/EventDetails";
 import Booking from "./pages/Booking";
@@ -41,7 +42,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Route>
             <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<div>Dashboard Content</div>} />
+              <Route index element={<Dashboard />} />
               <Route path="users" element={<div>User Management Content</div>} />
               <Route path="reports" element={<div>Reports Content</div>} />
               <Route path="settings" element={<div>Settings Content</div>} />
