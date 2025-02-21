@@ -3,10 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
-  FileChartColumn,
+  Calendar,
   Settings,
   Bell,
   User,
+  DollarSign,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -18,14 +19,19 @@ const navigation = [
     icon: LayoutDashboard,
   },
   {
-    name: "User Management",
+    name: "User Verification",
     href: "/admin/users",
     icon: Users,
   },
   {
-    name: "Reports & Analytics",
-    href: "/admin/reports",
-    icon: FileChartColumn,
+    name: "Event Verification",
+    href: "/admin/events",
+    icon: Calendar,
+  },
+  {
+    name: "Sales Tracking",
+    href: "/admin/sales",
+    icon: DollarSign,
   },
   {
     name: "System Settings",

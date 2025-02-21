@@ -8,6 +8,9 @@ import { AuthProvider } from "./contexts/AuthContext";
 import Layout from "./components/Layout";
 import AdminLayout from "./components/admin/AdminLayout";
 import Dashboard from "./components/admin/Dashboard";
+import UsersVerification from "./components/admin/UsersVerification";
+import EventVerification from "./components/admin/EventVerification";
+import SalesTracking from "./components/admin/SalesTracking";
 import Index from "./pages/Index";
 import EventDetails from "./pages/EventDetails";
 import Booking from "./pages/Booking";
@@ -43,8 +46,9 @@ const App = () => (
             </Route>
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<Dashboard />} />
-              <Route path="users" element={<div>User Management Content</div>} />
-              <Route path="reports" element={<div>Reports Content</div>} />
+              <Route path="users" element={<UsersVerification />} />
+              <Route path="events" element={<EventVerification />} />
+              <Route path="sales" element={<SalesTracking />} />
               <Route path="settings" element={<div>Settings Content</div>} />
               <Route path="notifications" element={<div>Notifications Content</div>} />
               <Route path="profile" element={<div>Profile Content</div>} />
