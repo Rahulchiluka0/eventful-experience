@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Check, X, MessageSquare, Calendar } from "lucide-react";
+import { Check, X, MessageSquare, Calendar, Store } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 const pendingEvents = [
@@ -11,7 +11,7 @@ const pendingEvents = [
     title: "Summer Music Festival 2024",
     organizer: "John Smith",
     date: "2024-06-15",
-    type: "Show Event",
+    type: "show",
     description: "A 3-day music festival featuring local and international artists",
     status: "pending",
   },
@@ -20,11 +20,11 @@ const pendingEvents = [
     title: "Food & Wine Expo",
     organizer: "Sarah Johnson",
     date: "2024-05-20",
-    type: "Stall Event",
+    type: "stall",
+    stallCount: 50,
     description: "Showcasing local cuisine and wine from various regions",
     status: "pending",
   },
-  // Add more mock data as needed
 ];
 
 const EventVerification = () => {
@@ -68,15 +68,33 @@ const EventVerification = () => {
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="font-medium">{event.title}</h3>
-                      <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                        <Calendar className="h-4 w-4" />
+                      <div className="flex items-center space-x-2">
+                        <h3 className="font-medium">{event.title}</h3>
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          event.type === 'show' 
+                            ? 'bg-blue-100 text-blue-800' 
+                            : 'bg-purple-100 text-purple-800'
+                        }`}>
+                          {event.type === 'show' ? 'Show Event' : 'Stall Event'}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2 text-sm text-muted-foreground mt-1">
+                        {event.type === 'show' ? (
+                          <Calendar className="h-4 w-4" />
+                        ) : (
+                          <Store className="h-4 w-4" />
+                        )}
                         <span>{event.date}</span>
                       </div>
                       <p className="text-sm text-muted-foreground">
                         Organizer: {event.organizer}
                       </p>
-                      <p className="text-sm">{event.description}</p>
+                      <p className="text-sm mt-2">{event.description}</p>
+                      {event.type === 'stall' && (
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Number of Stalls: {event.stallCount}
+                        </p>
+                      )}
                     </div>
                     <div className="flex flex-col space-y-2">
                       <Button

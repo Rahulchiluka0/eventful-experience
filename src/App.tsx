@@ -8,6 +8,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import Layout from "./components/Layout";
 import AdminLayout from "./components/admin/AdminLayout";
 import OrganizerLayout from "./components/organizer/OrganizerLayout";
+import StallOrganizerLayout from "./components/stall-organizer/StallOrganizerLayout";
 import Dashboard from "./components/admin/Dashboard";
 import UsersVerification from "./components/admin/UsersVerification";
 import EventVerification from "./components/admin/EventVerification";
@@ -17,6 +18,7 @@ import EventList from "./components/organizer/EventList";
 import OrganizerDashboard from "./components/organizer/OrganizerDashboard";
 import BookingsManagement from "./components/organizer/BookingsManagement";
 import SalesOverview from "./components/organizer/SalesOverview";
+import StallEventForm from "./components/stall-organizer/StallEventForm";
 import UserDashboard from "./components/user/UserDashboard";
 import Index from "./pages/Index";
 import EventDetails from "./pages/EventDetails";
@@ -67,6 +69,13 @@ const App = () => (
               <Route path="events/new" element={<EventForm />} />
               <Route path="bookings" element={<BookingsManagement />} />
               <Route path="sales" element={<SalesOverview />} />
+            </Route>
+            <Route path="/stall-organizer" element={<StallOrganizerLayout />}>
+              <Route index element={<div>Stall Organizer Dashboard</div>} />
+              <Route path="events" element={<div>Stall Events List</div>} />
+              <Route path="events/new" element={<StallEventForm />} />
+              <Route path="managers" element={<div>Stall Managers</div>} />
+              <Route path="revenue" element={<div>Revenue Overview</div>} />
             </Route>
           </Routes>
         </AuthProvider>
