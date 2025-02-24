@@ -45,10 +45,12 @@ const Navbar = () => {
 
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
-                <Button variant="ghost" className="flex items-center space-x-2">
-                  <User className="h-5 w-5" />
-                  <span>{user?.name}</span>
-                </Button>
+                <Link to="/dashboard">
+                  <Button variant="ghost" className="flex items-center space-x-2">
+                    <User className="h-5 w-5" />
+                    <span>{user?.name}</span>
+                  </Button>
+                </Link>
                 <Button
                   variant="ghost"
                   onClick={logout}

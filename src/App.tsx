@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,6 +14,10 @@ import EventVerification from "./components/admin/EventVerification";
 import SalesTracking from "./components/admin/SalesTracking";
 import EventForm from "./components/organizer/EventForm";
 import EventList from "./components/organizer/EventList";
+import OrganizerDashboard from "./components/organizer/OrganizerDashboard";
+import BookingsManagement from "./components/organizer/BookingsManagement";
+import SalesOverview from "./components/organizer/SalesOverview";
+import UserDashboard from "./components/user/UserDashboard";
 import Index from "./pages/Index";
 import EventDetails from "./pages/EventDetails";
 import Booking from "./pages/Booking";
@@ -23,9 +28,6 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
 import Redirect from "./pages/Redirect";
-import OrganizerDashboard from "./components/organizer/OrganizerDashboard";
-import BookingsManagement from "./components/organizer/BookingsManagement";
-import SalesOverview from "./components/organizer/SalesOverview";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +41,7 @@ const App = () => (
           <Routes>
             <Route element={<Layout />}>
               <Route path="/" element={<Index />} />
+              <Route path="/dashboard" element={<UserDashboard />} />
               <Route path="/events/:id" element={<EventDetails />} />
               <Route path="/booking/:id" element={<Booking />} />
               <Route path="/payment/:bookingId" element={<Payment />} />
