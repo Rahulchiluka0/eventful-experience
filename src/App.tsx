@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -24,6 +23,9 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
 import Redirect from "./pages/Redirect";
+import OrganizerDashboard from "./components/organizer/OrganizerDashboard";
+import BookingsManagement from "./components/organizer/BookingsManagement";
+import SalesOverview from "./components/organizer/SalesOverview";
 
 const queryClient = new QueryClient();
 
@@ -57,11 +59,11 @@ const App = () => (
               <Route path="profile" element={<div>Profile Content</div>} />
             </Route>
             <Route path="/organizer" element={<OrganizerLayout />}>
-              <Route index element={<div>Organizer Dashboard</div>} />
+              <Route index element={<OrganizerDashboard />} />
               <Route path="events" element={<EventList />} />
               <Route path="events/new" element={<EventForm />} />
-              <Route path="bookings" element={<div>Bookings Overview</div>} />
-              <Route path="sales" element={<div>Sales Overview</div>} />
+              <Route path="bookings" element={<BookingsManagement />} />
+              <Route path="sales" element={<SalesOverview />} />
             </Route>
           </Routes>
         </AuthProvider>
