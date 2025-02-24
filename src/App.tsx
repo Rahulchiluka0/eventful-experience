@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -30,6 +29,10 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
 import Redirect from "./pages/Redirect";
+import StallOrganizerDashboard from "./components/stall-organizer/StallOrganizerDashboard";
+import StallEventsList from "./components/stall-organizer/StallEventsList";
+import StallManagersList from "./components/stall-organizer/StallManagersList";
+import RevenueOverview from "./components/stall-organizer/RevenueOverview";
 
 const queryClient = new QueryClient();
 
@@ -71,11 +74,11 @@ const App = () => (
               <Route path="sales" element={<SalesOverview />} />
             </Route>
             <Route path="/stall-organizer" element={<StallOrganizerLayout />}>
-              <Route index element={<div>Stall Organizer Dashboard</div>} />
-              <Route path="events" element={<div>Stall Events List</div>} />
+              <Route index element={<StallOrganizerDashboard />} />
+              <Route path="events" element={<StallEventsList />} />
               <Route path="events/new" element={<StallEventForm />} />
-              <Route path="managers" element={<div>Stall Managers</div>} />
-              <Route path="revenue" element={<div>Revenue Overview</div>} />
+              <Route path="managers" element={<StallManagersList />} />
+              <Route path="revenue" element={<RevenueOverview />} />
             </Route>
           </Routes>
         </AuthProvider>
