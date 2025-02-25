@@ -167,7 +167,7 @@ const EarningsView = () => {
                 </span>
               </div>
             ))}
-          </CardContent>
+          </div>
         </CardContent>
       </Card>
     </div>
