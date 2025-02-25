@@ -15,7 +15,7 @@ import SalesTracking from "./components/admin/SalesTracking";
 import EventForm from "./components/organizer/EventForm";
 import EventList from "./components/organizer/EventList";
 import OrganizerDashboard from "./components/organizer/OrganizerDashboard";
-import BookingsManagement from "./components/organizer/BookingsManagement";
+import BookingsManagementOrganizer from "./components/organizer/BookingsManagement";
 import SalesOverview from "./components/organizer/SalesOverview";
 import StallEventForm from "./components/stall-organizer/StallEventForm";
 import UserDashboard from "./components/user/UserDashboard";
@@ -35,6 +35,10 @@ import StallManagersList from "./components/stall-organizer/StallManagersList";
 import RevenueOverview from "./components/stall-organizer/RevenueOverview";
 import StallManagerLayout from "./components/stall-manager/StallManagerLayout";
 import StallManagerDashboard from "./components/stall-manager/StallManagerDashboard";
+import MyStalls from "./components/stall-manager/MyStalls";
+import BookingsManagement from "./components/stall-manager/BookingsManagement";
+import EarningsView from "./components/stall-manager/EarningsView";
+import Settings from "./components/stall-manager/Settings";
 
 const queryClient = new QueryClient();
 
@@ -72,7 +76,7 @@ const App = () => (
               <Route index element={<OrganizerDashboard />} />
               <Route path="events" element={<EventList />} />
               <Route path="events/new" element={<EventForm />} />
-              <Route path="bookings" element={<BookingsManagement />} />
+              <Route path="bookings" element={<BookingsManagementOrganizer />} />
               <Route path="sales" element={<SalesOverview />} />
             </Route>
             <Route path="/stall-organizer" element={<StallOrganizerLayout />}>
@@ -84,10 +88,10 @@ const App = () => (
             </Route>
             <Route path="/stall-manager" element={<StallManagerLayout />}>
               <Route index element={<StallManagerDashboard />} />
-              <Route path="stalls" element={<div>My Stalls</div>} />
-              <Route path="bookings" element={<div>Bookings</div>} />
-              <Route path="earnings" element={<div>Earnings</div>} />
-              <Route path="settings" element={<div>Settings</div>} />
+              <Route path="stalls" element={<MyStalls />} />
+              <Route path="bookings" element={<BookingsManagement />} />
+              <Route path="earnings" element={<EarningsView />} />
+              <Route path="settings" element={<Settings />} />
             </Route>
           </Routes>
         </AuthProvider>
