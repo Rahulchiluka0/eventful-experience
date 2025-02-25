@@ -7,12 +7,13 @@ interface User {
   id: string;
   email: string;
   name: string;
+  role: string;
 }
 
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string, name: string) => Promise<void>;
+  signup: (email: string, password: string, name: string, role: string) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
 }
@@ -49,6 +50,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         id: "1",
         email,
         name: "John Doe",
+        role: "stall-manager", // Default role for demo
       };
       
       setUser(mockUser);
@@ -57,7 +59,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         title: "Welcome back!",
         description: "You have successfully logged in.",
       });
-      navigate("/");
+
+      // Redirect based on role
+      switch (mockUser.role) {
+        case "event-organizer":
+          navigate("/organizer");
+          break;
+        case "stall-organizer":
+          navigate("/stall-organizer");
+          break;
+        case "stall-manager":
+          navigate("/stall-manager");
+          break;
+        default:
+          navigate("/");
+      }
     } catch (error) {
       toast({
         variant: "destructive",
@@ -67,7 +83,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const signup = async (email: string, password: string, name: string) => {
+  const signup = async (email: string, password: string, name: string, role: string) => {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -76,6 +92,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         id: "1",
         email,
         name,
+        role,
       };
       
       setUser(mockUser);
@@ -84,7 +101,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         title: "Welcome!",
         description: "Your account has been created successfully.",
       });
-      navigate("/");
+
+      // Redirect based on role
+      switch (role) {
+        case "event-organizer":
+          navigate("/organizer");
+          break;
+        case "stall-organizer":
+          navigate("/stall-organizer");
+          break;
+        case "stall-manager":
+          navigate("/stall-manager");
+          break;
+        default:
+          navigate("/");
+      }
     } catch (error) {
       toast({
         variant: "destructive",

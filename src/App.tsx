@@ -33,6 +33,8 @@ import StallOrganizerDashboard from "./components/stall-organizer/StallOrganizer
 import StallEventsList from "./components/stall-organizer/StallEventsList";
 import StallManagersList from "./components/stall-organizer/StallManagersList";
 import RevenueOverview from "./components/stall-organizer/RevenueOverview";
+import StallManagerLayout from "./components/stall-manager/StallManagerLayout";
+import StallManagerDashboard from "./components/stall-manager/StallManagerDashboard";
 
 const queryClient = new QueryClient();
 
@@ -79,6 +81,13 @@ const App = () => (
               <Route path="events/new" element={<StallEventForm />} />
               <Route path="managers" element={<StallManagersList />} />
               <Route path="revenue" element={<RevenueOverview />} />
+            </Route>
+            <Route path="/stall-manager" element={<StallManagerLayout />}>
+              <Route index element={<StallManagerDashboard />} />
+              <Route path="stalls" element={<div>My Stalls</div>} />
+              <Route path="bookings" element={<div>Bookings</div>} />
+              <Route path="earnings" element={<div>Earnings</div>} />
+              <Route path="settings" element={<div>Settings</div>} />
             </Route>
           </Routes>
         </AuthProvider>

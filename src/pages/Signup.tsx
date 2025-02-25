@@ -3,17 +3,26 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+const roles = [
+  { id: "event-organizer", label: "Event Organizer" },
+  { id: "stall-organizer", label: "Stall Organizer" },
+  { id: "stall-manager", label: "Stall Manager" },
+];
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [role, setRole] = useState("");
   const { signup } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await signup(email, password, name);
+    await signup(email, password, name, role);
   };
 
   return (
@@ -21,8 +30,10 @@ const Signup = () => {
       <div className="max-w-md mx-auto">
         <h1 className="text-2xl font-bold mb-6 text-center">Create Account</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
+          <div className="space-y-2">
+            <Label htmlFor="name">Full Name</Label>
             <Input
+              id="name"
               type="text"
               placeholder="Full Name"
               value={name}
@@ -30,8 +41,10 @@ const Signup = () => {
               required
             />
           </div>
-          <div>
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
             <Input
+              id="email"
               type="email"
               placeholder="Email"
               value={email}
@@ -39,14 +52,31 @@ const Signup = () => {
               required
             />
           </div>
-          <div>
+          <div className="space-y-2">
+            <Label htmlFor="password">Password</Label>
             <Input
+              id="password"
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="role">Select Role</Label>
+            <Select required value={role} onValueChange={setRole}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select your role" />
+              </SelectTrigger>
+              <SelectContent>
+                {roles.map((role) => (
+                  <SelectItem key={role.id} value={role.id}>
+                    {role.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <Button type="submit" className="w-full">
             Sign Up
