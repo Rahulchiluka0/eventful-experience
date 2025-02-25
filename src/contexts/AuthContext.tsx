@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -50,7 +49,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         id: "1",
         email,
         name: "John Doe",
-        role: "stall-manager", // Default role for demo
+        role: "user", // Default role for demo
       };
       
       setUser(mockUser);
@@ -70,6 +69,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           break;
         case "stall-manager":
           navigate("/stall-manager");
+          break;
+        case "user":
+          navigate("/"); // Regular users go to homepage
           break;
         default:
           navigate("/");
@@ -112,6 +114,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           break;
         case "stall-manager":
           navigate("/stall-manager");
+          break;
+        case "user":
+          navigate("/"); // Regular users go to homepage
           break;
         default:
           navigate("/");

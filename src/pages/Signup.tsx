@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const roles = [
+  { id: "user", label: "Event Attendee" },
   { id: "event-organizer", label: "Event Organizer" },
   { id: "stall-organizer", label: "Stall Organizer" },
   { id: "stall-manager", label: "Stall Manager" },
@@ -17,7 +18,8 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState("user"); // Set default role to user
+
   const { signup } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -64,8 +66,8 @@ const Signup = () => {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="role">Select Role</Label>
-            <Select required value={role} onValueChange={setRole}>
+            <Label htmlFor="role">I am registering as</Label>
+            <Select value={role} onValueChange={setRole}>
               <SelectTrigger>
                 <SelectValue placeholder="Select your role" />
               </SelectTrigger>
