@@ -154,3 +154,149 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     </AuthContext.Provider>
   );
 };
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import { AuthService } from '@/lib/api';
+import { useToast } from '@/components/ui/use-toast';
+
+interface User {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  verificationStatus: string;
+}
+
+interface AuthContextType {
+  user: User | null;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  register: (userData: any) => Promise<void>;
+  logout: () => Promise<void>;
+  isAuthenticated: boolean;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Check for existing user session on load
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await AuthService.getCurrentUser();
+        setUser(response.data.user);
+      } catch (error) {
+        console.error('Failed to fetch current user', error);
+        // Clear any stale tokens
+        localStorage.removeItem('token');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
+
+  const login = async (email: string, password: string) => {
+    try {
+      setLoading(true);
+      const response = await AuthService.login(email, password);
+      setUser(response.data.user);
+      
+      // Display success toast
+      toast({
+        title: 'Login successful',
+        description: `Welcome back, ${response.data.user.firstName}!`,
+        variant: 'default',
+      });
+    } catch (error: any) {
+      console.error('Login failed', error);
+      
+      // Display error toast
+      toast({
+        title: 'Login failed',
+        description: error.response?.data?.message || 'An error occurred during login',
+        variant: 'destructive',
+      });
+      
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const register = async (userData: any) => {
+    try {
+      setLoading(true);
+      const response = await AuthService.register(userData);
+      setUser(response.data.user);
+      
+      // Display success toast
+      toast({
+        title: 'Registration successful',
+        description: 'Your account has been created successfully!',
+        variant: 'default',
+      });
+    } catch (error: any) {
+      console.error('Registration failed', error);
+      
+      // Display error toast
+      toast({
+        title: 'Registration failed',
+        description: error.response?.data?.message || 'An error occurred during registration',
+        variant: 'destructive',
+      });
+      
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await AuthService.logout();
+      setUser(null);
+      
+      // Display success toast
+      toast({
+        title: 'Logged out',
+        description: 'You have been logged out successfully',
+        variant: 'default',
+      });
+    } catch (error) {
+      console.error('Logout failed', error);
+      
+      // Force logout on the client side even if the server request fails
+      setUser(null);
+      localStorage.removeItem('token');
+    }
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        login,
+        register,
+        logout,
+        isAuthenticated: !!user,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
