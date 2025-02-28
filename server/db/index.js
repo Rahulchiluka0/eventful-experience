@@ -11,11 +11,26 @@ const { Pool } = pg;
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-// Use DATABASE_URL from Replit Secrets if available, otherwise build from local config
+// Use DATABASE_URL from Replit Secrets if available
 let connectionString = process.env.DATABASE_URL;
 
-// If no connection string, create one from individual parameters
+// Log database connection information
 if (!connectionString) {
+  console.log(`
+========== DATABASE CONNECTION ERROR ==========
+No PostgreSQL database connection found!
+
+Please create a PostgreSQL database in Replit by:
+1. Open a new tab in Replit
+2. Type "Database" in the search bar
+3. Choose "create a database"
+4. Replit will automatically add DATABASE_URL to your Secrets
+
+Your app will not work until you complete these steps.
+==============================================
+  `);
+  
+  // Fallback connection string for development that will likely fail
   const host = process.env.PGHOST || 'localhost';
   const user = process.env.PGUSER || 'postgres';
   const database = process.env.PGDATABASE || 'event_management';
@@ -23,11 +38,8 @@ if (!connectionString) {
   const port = process.env.PGPORT || 5432;
   
   connectionString = `postgresql://${user}:${password}@${host}:${port}/${database}`;
-  
-  console.log('Using local database configuration');
 }
 
-// Log database connection status
 console.log('Connecting to database...');
 
 const pool = new Pool({
