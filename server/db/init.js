@@ -9,13 +9,22 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const schemaPath = path.join(__dirname, 'schema.sql');
 const schema = fs.readFileSync(schemaPath, 'utf8');
 
+// Add the users schema path
+const userSchemaPath = path.join(__dirname, 'schema-users.sql');
+const userSchema = fs.readFileSync(userSchemaPath, 'utf8');
+
 async function initializeDatabase() {
   const client = await db.getClient();
   
   try {
     await client.query('BEGIN');
     
-    // Execute schema
+    console.log('Creating user schema and enums...');
+    // Execute user schema first (contains enums and users table)
+    await client.query(userSchema);
+    
+    console.log('Creating remaining schema...');
+    // Execute main schema
     await client.query(schema);
     
     // Check if admin user exists, create if not

@@ -59,3 +59,40 @@ export default {
     return client;
   }
 };
+import pg from 'pg';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(__dirname, '..', '.env') });
+
+const { Pool } = pg;
+
+const pool = new Pool({
+  // Use environment variables or default values
+  host: process.env.PGHOST || 'localhost',
+  user: process.env.PGUSER || 'postgres',
+  database: process.env.PGDATABASE || 'event_management',
+  password: process.env.PGPASSWORD || 'postgres',
+  port: process.env.PGPORT || 5432,
+});
+
+pool.on('error', (err) => {
+  console.error('Unexpected error on idle client', err);
+  process.exit(-1);
+});
+
+// Test connection
+pool.query('SELECT NOW()', (err, res) => {
+  if (err) {
+    console.error('Database connection failed:', err.stack);
+  } else {
+    console.log('Database connected successfully');
+  }
+});
+
+export default {
+  query: (text, params) => pool.query(text, params),
+  getClient: () => pool.connect()
+};
