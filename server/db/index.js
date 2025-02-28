@@ -11,27 +11,28 @@ const { Pool } = pg;
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-// Use DATABASE_URL from Replit Secrets if available
+// Use DATABASE_URL from Replit Secrets if available, otherwise build from local config
 let connectionString = process.env.DATABASE_URL;
 
-// Test database connection and notify if it's not available
-try {
-  console.log('Connecting to database...');
-  if (!connectionString) {
-    console.warn('DATABASE_URL not found in environment variables.');
-    console.warn('Please create a PostgreSQL database in Replit by:');
-    console.warn('1. Opening a new tab');
-    console.warn('2. Typing "Database" in the search bar');
-    console.warn('3. Choosing "Create a database"');
-    console.warn('4. The DATABASE_URL will be automatically added to your Secrets');
-  }
-} catch (error) {
-  console.error('Error checking database configuration:', error);
+// If no connection string, create one from individual parameters
+if (!connectionString) {
+  const host = process.env.PGHOST || 'localhost';
+  const user = process.env.PGUSER || 'postgres';
+  const database = process.env.PGDATABASE || 'event_management';
+  const password = process.env.PGPASSWORD || 'postgres';
+  const port = process.env.PGPORT || 5432;
+  
+  connectionString = `postgresql://${user}:${password}@${host}:${port}/${database}`;
+  
+  console.log('Using local database configuration');
 }
+
+// Log database connection status
+console.log('Connecting to database...');
 
 const pool = new Pool({
   connectionString,
-  ssl: isProduction ? { rejectUnauthorized: false } : false,
+  ssl: connectionString.includes('.neon.tech') ? { rejectUnauthorized: false } : false,
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
