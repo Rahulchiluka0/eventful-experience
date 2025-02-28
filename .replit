@@ -5,4 +5,32 @@ run = "npm run dev"
 channel = "stable-24_05"
 
 [deployment]
-run = ["sh", "-c", "npm run dev"]
+run = ["sh", "-c", "npm run start:prod"]
+build = ["sh", "-c", "npm run build"]
+
+[workflows]
+runButton = "Initialize Database"
+
+[[workflows.workflow]]
+name = "Start Backend"
+author = 40091233
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run server:dev"
+
+[[workflows.workflow]]
+name = "Start Frontend and Backend"
+author = 40091233
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev:full"
+
+[[workflows.workflow]]
+name = "Initialize Database"
+author = 40091233
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run init-db"
